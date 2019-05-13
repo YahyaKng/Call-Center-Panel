@@ -23,5 +23,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+
+
+	Route::resource('team', 'TeamController', ['except' => ['show']]);
+	Route::get('team-edit', ['as' => 'team.edit', 'uses' => 'TeamController@edit']);
+	Route::put('team-edit', ['as' => 'team.update', 'uses' => 'TeamController@update']);
 });
+
+// Route::group(['middleware' => 'auth'], function () {
+	
+// 	// Route::put('team/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+// });
 
