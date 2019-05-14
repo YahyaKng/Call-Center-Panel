@@ -18,7 +18,7 @@ class CreateTeamsTable extends Migration
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->integer('admin_id')->nullable();
-            $table->foreign('admin_id')->references('id')->on('users');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');;
             $table->integer('max_meal_break')->nullable();
             $table->integer('max_rest_break')->nullable();
             $table->timestamps();
