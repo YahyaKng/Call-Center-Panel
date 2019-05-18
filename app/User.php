@@ -66,4 +66,21 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Status');
     }
+
+    /**
+     * Get the user`s rest request.
+     */
+    public function rest()
+    {
+        return $this->hasOne('App\Rest');
+    }
+
+    /**
+     * Get the user`s rest history.
+     */
+    public function rest_histories()
+    {
+        return $this->hasMany('App\Rest');
+    }
+
 }

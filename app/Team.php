@@ -23,7 +23,7 @@ class Team extends Model
         'max_rest_break',
         'admin_id',
     ];
-
+    
     /**
      * Get the users of this team.
      */
@@ -31,4 +31,5 @@ class Team extends Model
     {
         return $this->hasMany('App\User');
     }
+
 }
