@@ -34,26 +34,32 @@
                             <thead class="thead-light">
                                 <tr>
                                     <th scope="col">{{ __('Name') }}</th>
+                                    <th scope="col">{{ __('Team') }}</th>
+                                    <th scope="col">{{ __('Role') }}</th>
+                                    <th scope="col">{{ __('Line') }}</th>
                                     <th scope="col">{{ __('Email') }}</th>
-                                    <th scope="col">{{ __('Creation Date') }}</th>
-                                    <th scope="col"></th>
+                                    <th scope="col">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
                                         <td>{{ $user->name }}</td>
+                                        <td>{{ $user->team ? $user->team->name : '--' }}</td>
+                                        <td>{{ $user->role ? $user->role->role : '--' }}</td>
+                                        <td>{{ $user->line }}</td>
                                         <td>
                                             <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
                                         </td>
-                                        <td>{{ $user->created_at->format('d/m/Y H:i') }}</td>
+                                        
                                         <td class="text-right">
-                                            <div class="dropdown">
-                                                <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                                    @if ($user->id != auth()->id())
+                                            @if(auth()->user()->role()->first()->toArray()["role"] == "SuperAdmin")
+                                                <div class="dropdown">
+                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                    
                                                         <form action="{{ route('user.destroy', $user) }}" method="post">
                                                             @csrf
                                                             @method('delete')
@@ -63,11 +69,12 @@
                                                                 {{ __('Delete') }}
                                                             </button>
                                                         </form>    
-                                                    @else
-                                                        <a class="dropdown-item" href="{{ route('profile.edit') }}">{{ __('Edit') }}</a>
-                                                    @endif
+                                                
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @else
+                                                --
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

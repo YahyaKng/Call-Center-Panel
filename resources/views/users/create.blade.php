@@ -20,7 +20,6 @@
                     <div class="card-body">
                         <form method="post" action="{{ route('user.store') }}" autocomplete="off">
                             @csrf
-                            
                             <h6 class="heading-small text-muted mb-4">{{ __('User information') }}</h6>
                             <div class="pl-lg-4">
                                 <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
@@ -57,7 +56,44 @@
                                     <label class="form-control-label" for="input-password-confirmation">{{ __('Confirm Password') }}</label>
                                     <input type="password" name="password_confirmation" id="input-password-confirmation" class="form-control form-control-alternative" placeholder="{{ __('Confirm Password') }}" value="" required>
                                 </div>
+                                <div class="form-group{{ $errors->has('line') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-line">{{ __('Line') }}</label>
+                                    <input type="text" name="line" id="input-line" class="form-control form-control-alternative{{ $errors->has('line') ? ' is-invalid' : '' }}" placeholder="{{ __('line') }}" value="{{ old('line') }}" required autofocus>
 
+                                    @if ($errors->has('line'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('line') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="form-group{{ $errors->has('role_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-role_id">{{ __('Role') }}</label>
+                                    <select name="role_id" id="input-role_id" class="form-control form-control-alternative{{ $errors->has('role_id') ? ' is-invalid' : '' }}" placeholder="{{ __('role_id') }}" value="{{ old('role_id') }}" >
+                                    @foreach($roles as $role)
+                                        <option value="{{$role->id}}">{{ $role->role }}</option>
+                                    @endforeach
+                                    </select>
+                                    @if ($errors->has('role_id'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('role_id') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="form-group{{ $errors->has('team_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-team_id">{{ __('Team') }}</label>
+                                    <!-- <input type="text" name="team_id" id="input-team_id" class="form-control form-control-alternative{{ $errors->has('team_id') ? ' is-invalid' : '' }}" placeholder="{{ __('team_id') }}" value="{{ old('team_id') }}" required autofocus> -->
+                                    <select name="team_id" id="input-team_id" class="form-control form-control-alternative{{ $errors->has('team_id') ? ' is-invalid' : '' }}" placeholder="{{ __('team_id') }}" value="{{ old('team_id') }}" >
+                                    @foreach($teams as $team)
+                                        <option value="{{$team->id}}">{{ $team->name }}</option>
+                                    @endforeach
+                                    </select>
+                                    @if ($errors->has('team_id'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('team_id') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
                                 </div>
