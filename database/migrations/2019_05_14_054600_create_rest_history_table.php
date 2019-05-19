@@ -21,7 +21,11 @@ class CreateRestHistoryTable extends Migration
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->string('rest_type');
             // add break start and break end
-            $table->timestamps();
+            $table->integer('end_status')->nullable(); // cancelled / rested
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('break_start')->nullable();
+            $table->timestamp('end')->nullable(); // cancel / end
+            // $table->timestamps();
         });
     }
 
