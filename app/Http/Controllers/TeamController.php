@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Team;
+use App\User;
 use App\Http\Requests\TeamRequest;
 // use Illuminate\Http\Request;
 
@@ -25,7 +26,8 @@ class TeamController extends Controller
      */
     public function create()
     {
-        return view('teams.create');
+        $admins = User::where('role_id', '!=', 3);
+        return view('teams.create')->with('admins', $admins);
     }
 
     /**
@@ -47,10 +49,10 @@ class TeamController extends Controller
      * @param  \App\Team  $team
      * @return \Illuminate\Http\Response
      */
-    public function show(Team $team)
-    {
-        //
-    }
+    // public function show(Team $team)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -60,7 +62,7 @@ class TeamController extends Controller
      */
     public function edit(Team $team)
     {
-        //
+        return view('teams.edit', compact('team'));
     }
 
     /**
@@ -70,9 +72,13 @@ class TeamController extends Controller
      * @param  \App\Team  $team
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Team $team)
+    public function update(TeamRequest $request, Team  $team)
     {
-        //
+        $team->update(
+            $request->all()
+        );
+
+        return redirect()->route('team.index')->withStatus(__('Team successfully updated.'));
     }
 
     /**
