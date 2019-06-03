@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\User;
 use App\Team;
 use App\Role;
@@ -42,9 +43,13 @@ class UserController extends Controller
      */
     public function store(UserRequest $request, User $model)
     {
-        $model->create($request->merge(['password' => Hash::make($request->get('password'))])->all());
-
-        return redirect()->route('user.index')->withStatus(__('User successfully created.'));
+        if(auth()->user()->role()->first()->role != "User") {
+            $userId = auth()->user()->id;
+            $model->create($request->merge(['password' => Hash::make($request->get('password'))])->merge(['created_by' => $userId])->all());
+    
+            return redirect()->route('user.index')->withStatus(__('User successfully created.'));
+        }
+        return abort(403);
     }
 
     /**
