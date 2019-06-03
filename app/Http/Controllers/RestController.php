@@ -69,9 +69,7 @@ class RestController extends Controller
         if($restStatusNumber == 2) {
             $selectedRestRequest = Rest::where('team_id', $teamId)->where('rest_type', $statusType)->where('rest_status', 0)->first();
             if($selectedRestRequest) {
-                // ye nafar tu saf be in no break
-                // dd($selectedRestRequest);
-                $selectedRestRequest->update(['rest_status' => 1, 'break_start' => now()]);
+                Rest::where('id', $selectedRestRequest->id)->update(['rest_status' => 1, 'break_start' => now()]);
             }
         } elseif($restStatusNumber == 0) {
             

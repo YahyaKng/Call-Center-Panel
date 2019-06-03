@@ -67,7 +67,16 @@
                                                     {{ $rest->break_end ? $rest->break_end : "--" }}
                                                 </td>
                                                 <td>
-                                                    {{ $rest->break_end ? $rest->break_start : "--" }}
+                                                    <?php 
+                                                        if ($rest->break_start) {
+                                                            $endTime = $rest->break_end ? $rest->break_end : now(); 
+                                                            $endTime = \Carbon\Carbon::parse($endTime);
+                                                            $restDuration = $endTime->diffForHumans($rest->break_start);
+                                                            $last_space_position = strrpos($restDuration, ' ');
+                                                            $restDuration = substr($restDuration, 0, $last_space_position);
+                                                            echo $restDuration;
+                                                        }
+                                                    ?>
                                                 </td>
                                                 <td>
                                                     <?php 
