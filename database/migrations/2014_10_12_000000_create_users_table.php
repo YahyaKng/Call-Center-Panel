@@ -27,6 +27,8 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->integer('role_id')->nullable();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->integer('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
