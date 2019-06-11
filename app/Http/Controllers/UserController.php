@@ -45,7 +45,10 @@ class UserController extends Controller
     {
         if(auth()->user()->role()->first()->role != "User") {
             $userId = auth()->user()->id;
-            $model->create($request->merge(['password' => Hash::make($request->get('password'))])->merge(['created_by' => $userId])->all());
+            $request = $request->merge(['created_by' => $userId]);
+            $request = $request->merge(['password' => Hash::make($request->get('password'))]);
+            // dd($request->all());
+            $model->create($request->all());
     
             return redirect()->route('user.index')->withStatus(__('User successfully created.'));
         }
