@@ -22,7 +22,8 @@ class User extends Authenticatable
         'line',
         'status_id',
         'team_id',
-        'role_id'
+        'role_id',
+        'created_by',
     ];
 
     /**
@@ -82,5 +83,13 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Rest');
     }
+
+    /**
+     * Get the user`s rest history.
+     */
+    // public function created_by()
+    // {
+    //     return $this->belongsTo('App\User', 'created_by');
+    // }
 
 }
