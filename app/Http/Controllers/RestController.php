@@ -21,6 +21,10 @@ class RestController extends Controller
 
     /**
      * Request a rest break
+     * $rest_status 0 = waiting
+     * $rest_status -1 = cancelled
+     * $rest_status 1 = rest accepted and away(paused from queue)
+     * $rest_status 2 = back from break and online (unpaused from queue)
      */
     public function rest(Request $request, $type)
     {
@@ -29,7 +33,6 @@ class RestController extends Controller
         $user = User::findOrFail(auth()->user()->id);
         if ($user->rest) {
             $rests = Rest::where('user_id', $user->id)->orderBy('id', 'desc')->get();
-            // dd($rests);
             
             foreach ($rests as $rest) 
             {
@@ -39,7 +42,6 @@ class RestController extends Controller
                         $request->session()->flash('message', 'You have another type of break request active.');
                         return redirect('profile');
                     } else {
-                        
                         $restEndTime = now();
                         if($rest->rest_status == 0) {
                             $request->session()->flash('message', 'Your request is CANCELED');
@@ -48,6 +50,10 @@ class RestController extends Controller
                         } else {
                             $restStatusNumber = 2;
                             $request->session()->flash('message', 'You are ONLINE.');
+                            // Connect to asterisk and unpause extension using helper
+                            $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
+                            $sock = queue_pause_switch($sock, $user->line, false);
+                            // echo get_response($sock);
                         }        
                         Rest::where('id', $rest->id)->update(['rest_status' => $restStatusNumber, 'break_end' => $restEndTime]);
                     }
@@ -69,14 +75,26 @@ class RestController extends Controller
         if($restStatusNumber == 2) {
             $selectedRestRequest = Rest::where('team_id', $teamId)->where('rest_type', $statusType)->where('rest_status', 0)->first();
             if($selectedRestRequest) {
-                Rest::where('id', $selectedRestRequest->id)->update(['rest_status' => 1, 'break_start' => now()]);
+                $rest_object = Rest::where('id', $selectedRestRequest->id);
+                $rest_object->update(['rest_status' => 1, 'break_start' => now()]);
+                // Connect to asterisk and pause extension using helper
+                $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
+                // dd($rest_object->first()->user()->first()->line);
+                $sock = queue_pause_switch($sock, intval($rest_object->first()->user()->first()->line), true);
+                echo get_response($sock);
             }
         } elseif($restStatusNumber == 0) {
             
             $maxNumber = Team::findOrFail($teamId)["max_{$statusType}_break"];
             $teamUsersRestCount = Rest::where('team_id', $teamId)->where('rest_type', $statusType)->where('rest_status', 1)->count();
             if($teamUsersRestCount < $maxNumber) {
-                Rest::where('id', $restTableId->id)->update(['rest_status' => 1, 'break_start' => now()]);
+                $rest_object = Rest::where('id', $restTableId->id);
+                $rest_object->update(['rest_status' => 1, 'break_start' => now()]);
+                // Connect to asterisk and pause extension using helper
+                $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
+                // dd($rest_object->first()->user()->first()->line);
+                $sock = queue_pause_switch($sock, intval($rest_object->first()->user()->first()->line), true);
+                echo get_response($sock);
             }
         }
         return;
