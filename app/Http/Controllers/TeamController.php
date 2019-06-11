@@ -26,7 +26,7 @@ class TeamController extends Controller
      */
     public function create()
     {
-        $admins = User::where('role_id', '!=', 3);
+        $admins = User::where('role_id', '!=', 3)->get();
         return view('teams.create')->with('admins', $admins);
     }
 
@@ -38,6 +38,7 @@ class TeamController extends Controller
      */
     public function store(TeamRequest $request, Team $model)
     {
+        $request->all();
         $model->create($request->all());
 
         return redirect()->route('team.index')->withStatus(__('Team successfully created.'));
