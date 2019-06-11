@@ -46,9 +46,13 @@
                                 <div class="form-group{{ $errors->has('admin_id') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-admin_id">{{ __('admin_id') }}</label>
                                     <select name="admin_id" id="input-admin_id" class="form-control form-control-alternative{{ $errors->has('admin_id') ? ' is-invalid' : '' }}" placeholder="{{ __('admin_id') }}" value="{{ old('admin_id') }}" >
-                                        @foreach($admins as $admin)
-                                            <option value="{{$admin->id}}">{{ $admin->name }}</option>
-                                        @endforeach
+                                        @if(auth()->user()->role()->first()->role == 'SuperAdmin')
+                                            @foreach($admins as $admin)
+                                                <option value="{{ $admin->id }}">{{ $admin->name }}</option>
+                                            @endforeach
+                                        @else
+                                            <option value="{{ auth()->user()->id }}">{{ auth()->user()->name }}</option>
+                                        @endif
                                     </select>
                                     @if ($errors->has('admin_id'))
                                         <span class="invalid-feedback" role="alert">
