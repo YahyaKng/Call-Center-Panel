@@ -17,15 +17,15 @@ class CreateRestHistoryTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('team_id');
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            // $table->integer('team_id');
+            // $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->string('rest_type');
             // add break start and break end
             $table->integer('end_status')->nullable(); // cancelled / rested
-            $table->timestamp('created_at')->nullable();
             $table->timestamp('break_start')->nullable();
             $table->timestamp('end')->nullable(); // cancel / end
-            // $table->timestamps();
+            $table->timestamp('duration')->nullable();
+            $table->timestamps();
         });
     }
 
