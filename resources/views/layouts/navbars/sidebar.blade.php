@@ -94,7 +94,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('rest.index') }}">
+                        <a class="nav-link" href="{{ route('rest-history.index') }}">
                             {{ __('Breaks Queue') }}
                         </a>
                     </li>

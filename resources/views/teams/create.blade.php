@@ -80,6 +80,19 @@
                                         </span>
                                     @endif
                                 </div>
+                                <div class="form-group{{ $errors->has('queues') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-queues">{{ __('queues') }}</label>
+                                    one:<input type="checkbox" name="ids[]" value"1" />
+                                    two:<input type="checkbox" name="ids[]" value"24" />
+                                    three:<input type="checkbox" name="ids[]" value"56" />
+                                    four:<input type="checkbox" name="ids[]" value"100" />
+
+                                    @if ($errors->has('queues'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('queues') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

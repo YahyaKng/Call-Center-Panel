@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RestHistory extends Model
 {
+    protected $table = 'rest_history';
+
     protected $fillable = [
         'user_id',
         'team_id',

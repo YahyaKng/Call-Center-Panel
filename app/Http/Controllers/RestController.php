@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Rest;
 use App\Team;
 use App\User;
+use App\RestHistory;
 use Illuminate\Http\Request;
 
 class RestController extends Controller
@@ -50,12 +51,22 @@ class RestController extends Controller
                         } else {
                             $restStatusNumber = 2;
                             $request->session()->flash('message', 'You are ONLINE.');
+
                             // Connect to asterisk and unpause extension using helper
                             $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
                             $sock = queue_pause_switch($sock, $user->line, false);
-                            // echo get_response($sock);
+                            echo get_response($sock);
                         }        
                         Rest::where('id', $rest->id)->update(['rest_status' => $restStatusNumber, 'break_end' => $restEndTime]);
+                        if($restStatusNumber == 2) {
+                            RestHistory::create([
+                                                    'user_id'     => $user->id, 
+                                                    'rest_type'   => $rest->rest_type, 
+                                                    'end_status'  => $restStatusNumber, 
+                                                    'break_start' => $rest->break_start,
+                                                    'end'         => $rest->break_end,
+                                                    ]);
+                        }
                     }
                 }
             }
@@ -79,7 +90,6 @@ class RestController extends Controller
                 $rest_object->update(['rest_status' => 1, 'break_start' => now()]);
                 // Connect to asterisk and pause extension using helper
                 $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
-                // dd($rest_object->first()->user()->first()->line);
                 $sock = queue_pause_switch($sock, intval($rest_object->first()->user()->first()->line), true);
                 echo get_response($sock);
             }
@@ -92,7 +102,6 @@ class RestController extends Controller
                 $rest_object->update(['rest_status' => 1, 'break_start' => now()]);
                 // Connect to asterisk and pause extension using helper
                 $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
-                // dd($rest_object->first()->user()->first()->line);
                 $sock = queue_pause_switch($sock, intval($rest_object->first()->user()->first()->line), true);
                 echo get_response($sock);
             }

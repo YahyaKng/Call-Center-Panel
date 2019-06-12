@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('team-edit', ['as' => 'team.update', 'uses' => 'TeamController@update']);
 
 	Route::resource('rest', 'RestController', ['except' => ['show']]);
+	Route::resource('rest-history', 'RestHistoryController');
 	
 	// Request a REST break
 	Route::get('/check-rest/{type}', 'RestController@rest');
