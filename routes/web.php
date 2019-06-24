@@ -26,8 +26,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 	Route::resource('team', 'TeamController', ['except' => ['show']]);
-	Route::get('team-edit', ['as' => 'team.edit', 'uses' => 'TeamController@edit']);
-	Route::put('team-edit', ['as' => 'team.update', 'uses' => 'TeamController@update']);
+	// Route::get('team-edit', ['as' => 'team.edit', 'uses' => 'TeamController@edit']);
+	// Route::put('team-edit', ['as' => 'team.update', 'uses' => 'TeamController@update']);
 
 	Route::resource('rest', 'RestController', ['except' => ['show']]);
 	Route::resource('rest-history', 'RestHistoryController');
