@@ -38,6 +38,8 @@ class TeamController extends Controller
      */
     public function store(TeamRequest $request, Team $model)
     {
+        // $checkboxValues = implode('**', $request->input('queues'));
+        // $request->request->add(['queues' => $checkboxValues]);
         $request->all();
         $model->create($request->all());
 
@@ -90,6 +92,8 @@ class TeamController extends Controller
      */
     public function destroy(Team $team)
     {
-        //
+        $team->delete();
+
+        return redirect()->route('team.index')->withStatus(__('Team successfully deleted.'));
     }
 }

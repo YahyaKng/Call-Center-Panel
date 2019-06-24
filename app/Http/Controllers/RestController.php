@@ -49,13 +49,18 @@ class RestController extends Controller
                             $restStatusNumber = -1;
                             $restEndTime = NULL;
                         } else {
-                            $restStatusNumber = 2;
-                            $request->session()->flash('message', 'You are ONLINE.');
-
-                            // Connect to asterisk and unpause extension using helper
-                            $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
-                            $sock = queue_pause_switch($sock, $user->line, false);
-                            echo get_response($sock);
+                            /**
+                             * unpause from asterisk
+                             * function astersikUnpause returns true or false depending
+                             * on wether the extension was successfuly unpaused or not
+                             */
+                            if(asteriskUnpause($user->line)) {
+                                $restStatusNumber = 2;
+                                $request->session()->flash('message', 'You are ONLINE.');
+                            } else {
+                                // dd("Problem unpausing from asterisk, please try again");
+                                // $request->session()->flash('message', 'Problem unpausing from asterisk, please try again');
+                            };
                         }        
                         Rest::where('id', $rest->id)->update(['rest_status' => $restStatusNumber, 'break_end' => $restEndTime]);
                         if($restStatusNumber == 2) {
@@ -88,10 +93,19 @@ class RestController extends Controller
             if($selectedRestRequest) {
                 $rest_object = Rest::where('id', $selectedRestRequest->id);
                 $rest_object->update(['rest_status' => 1, 'break_start' => now()]);
-                // Connect to asterisk and pause extension using helper
-                $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
-                $sock = queue_pause_switch($sock, intval($rest_object->first()->user()->first()->line), true);
-                echo get_response($sock);
+
+                /**
+                 * unpause from asterisk
+                 * function astersikUnpause returns true or false depending
+                 * on wether the extension was successfuly unpaused or not
+                 */
+                if(asteriskPause($rest_object->first()->user()->first()->line)) {
+                    $restStatusNumber = 2;
+                    $request->session()->flash('message', 'You are ONLINE.');
+                } else {
+                    // dd("Problem pausing from asterisk, please try again");
+                    // $request->session()->flash('message', 'Problem unpausing from asterisk, please try again');
+                };
             }
         } elseif($restStatusNumber == 0) {
             
@@ -100,10 +114,18 @@ class RestController extends Controller
             if($teamUsersRestCount < $maxNumber) {
                 $rest_object = Rest::where('id', $restTableId->id);
                 $rest_object->update(['rest_status' => 1, 'break_start' => now()]);
-                // Connect to asterisk and pause extension using helper
-                $sock = connect_manager("192.168.110.218", "callcenter", "callcenter");
-                $sock = queue_pause_switch($sock, intval($rest_object->first()->user()->first()->line), true);
-                echo get_response($sock);
+                /**
+                 * unpause from asterisk
+                 * function astersikUnpause returns true or false depending
+                 * on wether the extension was successfuly unpaused or not
+                 */
+                if(asteriskPause($rest_object->first()->user()->first()->line)) {
+                    $restStatusNumber = 2;
+                    $request->session()->flash('message', 'You are ONLINE.');
+                } else {
+                    // dd("Problem pausing from asterisk, please try again");
+                    // $request->session()->flash('message', 'Problem unpausing from asterisk, please try again');
+                };
             }
         }
         return;

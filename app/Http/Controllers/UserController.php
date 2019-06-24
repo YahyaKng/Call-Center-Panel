@@ -47,7 +47,6 @@ class UserController extends Controller
             $userId = auth()->user()->id;
             $request = $request->merge(['created_by' => $userId]);
             $request = $request->merge(['password' => Hash::make($request->get('password'))]);
-            // dd($request->all());
             $model->create($request->all());
     
             return redirect()->route('user.index')->withStatus(__('User successfully created.'));
@@ -63,7 +62,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        return view('users.edit', compact('user'))
+                                    ->with('teams', Team::all())
+                                    ->with('roles', Role::all());;
     }
 
     /**

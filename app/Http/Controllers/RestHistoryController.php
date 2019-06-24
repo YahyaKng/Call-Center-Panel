@@ -14,8 +14,6 @@ class RestHistoryController extends Controller
      */
     public function index(RestHistory $model)
     {
-        asteriskPause(300);
-        // qAction();
         return view('resthistory.index', ['rests' => $model->paginate(15)]);
     }
 
