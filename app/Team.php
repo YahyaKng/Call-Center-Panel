@@ -22,6 +22,7 @@ class Team extends Model
         'max_meal_break',
         'max_rest_break',
         'admin_id',
+        'queues'
     ];
     
     /**
@@ -31,5 +32,14 @@ class Team extends Model
     {
         return $this->hasMany('App\User');
     }
+
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'queues' => 'array',
+    ];
 
 }
