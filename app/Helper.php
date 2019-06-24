@@ -47,6 +47,7 @@ use PAMI\Message\Action\SIPPeersAction;
 use PAMI\Message\Action\SIPShowRegistryAction;
 use PAMI\Message\Action\SIPNotifyAction;
 use PAMI\Message\Action\QueuesAction;
+use PAMI\Message\Action\QueueAddAction;
 use PAMI\Message\Action\QueueStatusAction;
 use PAMI\Message\Action\QueueSummaryAction;
 use PAMI\Message\Action\QueuePauseAction;
@@ -91,34 +92,57 @@ if(!class_exists('class A implements IEventListener')) {
     {
         public function handle(EventMessage $event)
         {
-            dd($event->getPaused());
+            // dd($event->getPaused());
         }
+    }
+}
+
+
+if (!function_exists('asteriskConnect')) {
+    function asteriskConnect() {
+
+        $options = array(
+            'host' => '192.168.110.218',
+            'scheme' => 'tcp://',
+            'port' => 5038,
+            'username' => 'callcenter',
+            'secret' => 'callcenter',
+            'connect_timeout' => 10,
+            'read_timeout' => 10
+        );
+        $client = new ClientImpl($options);
+        $client->open();
+        $client->registerEventListener(function (EventMessage $event) {
+            
+        });
+        return $client;
     }
 }
 
 
 if (!function_exists('asteriskPause')) {   
     function asteriskPause($extension) {
-        $options = array(
-            'host' => '192.168.110.218',
-            'scheme' => 'tcp://',
-            'port' => 5038,
-            'username' => 'callcenter',
-            'secret' => 'callcenter',
-            'connect_timeout' => 10,
-            'read_timeout' => 10
-        );
-        $client = new ClientImpl($options);
-        $client->open();
-        $client->registerEventListener(new A());
-        $client->send(new QueuePauseAction('300'));
+        $client = asteriskConnect();
+        $response = $client->send(new QueuePauseAction($extension));
         $client->process();
         $client->close();
+        return $response->isSuccess();
     }
 }
 
 if (!function_exists('asteriskUnpause')) {   
     function asteriskUnpause($extension) {
+        $client = asteriskConnect();
+        $response = $client->send(new QueueUnpauseAction($extension));
+        $client->process();
+        $client->close();
+        // $response->isSuccess() ? return true : return false;
+        return $response->isSuccess();
+    }
+}
+
+if (!function_exists('asteriskQueues')) {
+    function asteriskQueues() {
         $options = array(
             'host' => '192.168.110.218',
             'scheme' => 'tcp://',
@@ -129,10 +153,69 @@ if (!function_exists('asteriskUnpause')) {
             'read_timeout' => 10
         );
         $client = new ClientImpl($options);
+        $client->registerEventListener(function (EventMessage $event) {
+        });
         $client->open();
-        $client->send(new QueueUnpauseAction('300'));
+        $response = $client->send(new QueueStatusAction());
+        $queues = [];
+        $client->process();
+        $client->close();
+        // generate queues array
+        foreach ($response->getEvents() as $event) {
+            array_push($queues, $event->getKey('Queue'));
+            // dd($event->getKey('Queue'));
+        }
+        $queues = array_unique($queues);
+        array_pop($queues);
+        return $queues;
     }
 }
+
+
+if (!function_exists('asteriskAddToQueues')) {
+    function asteriskAddToQueues($queues, $extension) {
+        $client = asteriskConnect();
+        // $response->isSuccess() ? return true : return false;
+        foreach ($queues as $queue) {
+            $response = $client->send(new QueueAddAction($queue, $extension));
+            $client->process();
+            // if ($response->getMessage == 'Unable to add interface: Already there') {
+            //     $request->session()->flash('asteriskStatus', 'Member already in queue');
+            // }
+        }
+        // dd($response);
+        $client->close();
+        return $response;
+    }
+}
+
+if (!function_exists('asteriskRemoveFromQueues')) {
+    function asteriskRemoveFromQueues($queues, $extension) {
+        $client = asteriskConnect();
+        // $response->isSuccess() ? return true : return false;
+        foreach ($queues as $queue) {
+            $response = $client->send(new QueueRemoveAction($queue, $extension));
+            $client->process();
+        }
+        $client->close();
+        return $response;
+    }
+}
+
+if (!function_exists('asteriskStatusAction')) {
+    function asteriskStatusAction() {
+        $client = asteriskConnect();
+        $client->send(new QueueLogAction(1000, 300));
+        $client->process();
+        $client->close();
+    }
+}
+
+// if (!function_exists('asteriskQueuesList')) {
+//     function asteriskQueuesList() {
+
+//     }
+// }
 
 
 // if (!function_exists('qAction')) {   
