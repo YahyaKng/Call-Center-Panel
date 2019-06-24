@@ -38,6 +38,8 @@
                                     <th scope="col">{{ __('Team Admin') }}</th>
                                     <th scope="col">{{ __('Max Meal') }}</th>
                                     <th scope="col">{{ __('Max Rest') }}</th>
+                                    <th scope="col">{{ __('Queues') }}</th>
+                                    <th scope="col">{{ __('Action') }}</th>
                                     <th scope="col"></th>
                                 </tr>
                             </thead>
@@ -49,6 +51,34 @@
                                         <td>{{ $team->admin_id }}</td>
                                         <td>{{ $team->max_meal_break }}</td>
                                         <td>{{ $team->max_rest_break }}</td>
+                                        @if ($team->queues != NULL)
+                                            <td>{{ implode(", ", $team->queues) }}</td>
+                                        @else
+                                            <td>--</td>
+                                        @endif
+                                        <td class="text-right">
+                                            @if(auth()->user()->role()->first()->toArray()["role"] != "User")
+                                                <div class="dropdown">
+                                                    <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                                        <form action="{{ route('team.destroy', $team) }}" method="post">
+                                                            @csrf
+                                                            @method('delete')
+                                                                <a class="dropdown-item" href="{{ route('team.edit', $team) }}">{{ __('Edit') }}</a>
+                                                            @if(auth()->user()->team()->first()->id != $team->id)
+                                                                <button type="button" class="dropdown-item" onclick="confirm('{{ __("Are you sure you want to delete this team?") }}') ? this.parentElement.submit() : ''">
+                                                                    {{ __('Delete') }}
+                                                                </button>
+                                                            @endif
+                                                        </form>    
+                                                    </div>
+                                                </div>
+                                            @else
+                                                --
+                                            @endif
+                                        </td>
                                         <!-- <td class="text-right">
                                             <div class="dropdown">
                                                 <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

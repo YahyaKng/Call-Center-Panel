@@ -44,6 +44,27 @@
                                         </span>
                                     @endif
                                 </div>
+
+
+
+                                <div class="form-group{{ $errors->has('team_id') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-team_id">{{ __('team_id') }}</label>
+                                    <select name="team_id" id="input-team_id" class="form-control form-control-alternative{{ $errors->has('team_id') ? ' is-invalid' : '' }}" >
+                                        @foreach($teams as $team)
+                                            <option value="{{ $team->id }}" 
+                                                @if($team->id == $user->team_id) selected @endif 
+                                                >{{ $team->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('team_id'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('team_id') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+
+
+
                                 <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="input-password">{{ __('Password') }}</label>
                                     <input type="password" name="password" id="input-password" class="form-control form-control-alternative{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Password') }}" value="">

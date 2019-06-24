@@ -6,22 +6,30 @@
         'description' => __(''),
         'class' => 'col-lg-12'
     ])   
-
     <div class="container-fluid mt--7">
         <div class="row">
             <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
                 <div class="card card-profile shadow" id="live-status-box">
                     <div class="alert alert-primary" style="margin: 0px 10px; margin-top: -20px; margin-left: 23px; width: 91%; font-size:30px; text-align:center;" role="alert">
                         <strong>Status</strong> : {{ $userStatusText }}
+                        <h3 class="mb-0">&nbsp;&nbsp;Queues: 
+                            @if(auth()->user()->team()->first()->queues)
+                                @foreach(auth()->user()->team()->first()->queues as $queue) {{ $queue }} , @endforeach
+                            @else
+                                no queues...
+                            @endif
+                        </h3>
                     </div>
                     &nbsp
                     <div class="card-body pt-0 pt-md-4">
                         <div class="row">
-                            <div class="col">
-                                {!! $restButton !!}
-                                &nbsp;
-                                {!! $mealButton !!}
-                            </div>
+                            @if(auth()->user()->team()->first()->queues)
+                                <div class="col">
+                                    {!! $restButton !!}
+                                    &nbsp;
+                                    {!! $mealButton !!}
+                                </div>
+                            @endif
                         </div>
                         &nbsp
                         @if(session('message'))
