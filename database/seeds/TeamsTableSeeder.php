@@ -22,6 +22,7 @@ class TeamsTableSeeder extends Seeder
         DB::table('teams')->insert([
             'name' => 'پشتیبانی تلفنی',
             'slug' => 'call_support',
+            'queues' => '["2000","1000"]',
             'max_meal_break' => 1,
             'max_rest_break' => 3,
             'created_at' => now(),

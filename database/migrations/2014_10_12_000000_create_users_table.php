@@ -20,13 +20,13 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('line')->nullable();
             $table->integer('status_id')->nullable();
-            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
-            $table->integer('team_id')->default(1);
-            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
+            $table->foreign('status_id')->references('id')->on('statuses')->onDelete('set null');
+            $table->integer('team_id')->nullable();
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('set null');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->integer('role_id')->nullable();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
             $table->integer('created_by')->nullable();
             // $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
