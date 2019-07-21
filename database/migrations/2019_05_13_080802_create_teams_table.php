@@ -14,12 +14,12 @@ class CreateTeamsTable extends Migration
     public function up()
     {
         Schema::create('teams', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->string('queues')->nullable();
-            $table->integer('admin_id')->nullable();
-            $table->foreign('admin_id')->references('id')->on('users')->onDelete('set null');
+            $table->integer('admin_id')->nullable()->unsigned();
+            // $table->foreign('admin_id')->references('id')->on('users')->onDelete('set null');
             $table->integer('max_meal_break')->nullable();
             $table->integer('max_rest_break')->nullable();
             $table->timestamps();

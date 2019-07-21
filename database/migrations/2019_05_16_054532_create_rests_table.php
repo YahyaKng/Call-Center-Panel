@@ -14,10 +14,10 @@ class CreateRestsTable extends Migration
     public function up()
     {
         Schema::create('rests', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user_id')->nullable();
+            $table->increments('id');
+            $table->integer('user_id')->unsigned()->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('team_id')->nullable();
+            $table->integer('team_id')->unsigned()->nullable();
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->string('rest_type')->nullable();
             $table->integer('rest_status')->nullable(); // 0 = waiting, 1 = accepted

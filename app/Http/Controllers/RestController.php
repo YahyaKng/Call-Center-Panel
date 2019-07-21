@@ -104,7 +104,7 @@ class RestController extends Controller
                     $request->session()->flash('message', 'You are ONLINE.');
                 } else {
                     // dd("Problem pausing from asterisk, please try again");
-                    // $request->session()->flash('message', 'Problem unpausing from asterisk, please try again');
+                    // $request->session()->flash('message', 'Problem pausing from asterisk, please try again');
                 };
             }
         } elseif($restStatusNumber == 0) {
@@ -124,7 +124,7 @@ class RestController extends Controller
                     $request->session()->flash('message', 'You are ONLINE.');
                 } else {
                     // dd("Problem pausing from asterisk, please try again");
-                    // $request->session()->flash('message', 'Problem unpausing from asterisk, please try again');
+                    // $request->session()->flash('message', 'Problem pausing from asterisk, please try again');
                 };
             }
         }
