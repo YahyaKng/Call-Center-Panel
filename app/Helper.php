@@ -86,6 +86,9 @@ use PAMI\Message\Action\DongleResetAction;
 use PAMI\Message\Action\DongleSendUSSDAction;
 use PAMI\Message\Action\DongleSendPDUAction;
 
+$host = '192.168.110.10';
+$username = 'vmanager';
+$pass ='0757040ae47aec3438395437bfa4dbc8';
 
 if(!class_exists('class A implements IEventListener')) {
     class A implements IEventListener
@@ -102,11 +105,11 @@ if (!function_exists('asteriskConnect')) {
     function asteriskConnect() {
 
         $options = array(
-            'host' => '192.168.110.218',
+            'host' => '192.168.110.10',
             'scheme' => 'tcp://',
             'port' => 5038,
-            'username' => 'callcenter',
-            'secret' => 'callcenter',
+            'username' => 'vmanager',
+            'secret' => '0757040ae47aec3438395437bfa4dbc8',
             'connect_timeout' => 10,
             'read_timeout' => 10
         );
@@ -144,11 +147,11 @@ if (!function_exists('asteriskUnpause')) {
 if (!function_exists('asteriskQueues')) {
     function asteriskQueues() {
         $options = array(
-            'host' => '192.168.110.218',
+            'host' => '192.168.110.10',
             'scheme' => 'tcp://',
             'port' => 5038,
-            'username' => 'callcenter',
-            'secret' => 'callcenter',
+            'username' => 'vmanager',
+            'secret' => '0757040ae47aec3438395437bfa4dbc8',
             'connect_timeout' => 10,
             'read_timeout' => 10
         );
@@ -221,11 +224,11 @@ if (!function_exists('asteriskStatusAction')) {
 // if (!function_exists('qAction')) {   
 //     function qAction() {
 //         $options = array(
-//             'host' => '192.168.110.218',
+//             'host' => '192.168.110.10',
 //             'scheme' => 'tcp://',
 //             'port' => 5038,
-//             'username' => 'callcenter',
-//             'secret' => 'callcenter',
+//             'username' => 'vmanager',
+//             'secret' => '0757040ae47aec3438395437bfa4dbc8',
 //             'connect_timeout' => 10,
 //             'read_timeout' => 10
 //         );
@@ -235,7 +238,7 @@ if (!function_exists('asteriskStatusAction')) {
 //     }
 // }
 
-// $sock = connect("192.168.110.218", "callcenter", "callcenter");
+// $sock = connect("192.168.110.10", "callcenter", "callcenter");
 // $response = get_response($sock);
 // echo $response;
 // $sock = queue_pause_switch($sock, 300, true, 1000);
@@ -245,7 +248,7 @@ if (!function_exists('asteriskStatusAction')) {
 // echo get_response($sock);
 
 // if (!function_exists('connect_manager')) {
-//     function connect_manager($host="192.168.110.218", $user, $pass) {
+//     function connect_manager($host="192.168.110.10", $user, $pass) {
 //         $tmout = 3;
 //         $sock = fsockopen($host, 5038, $errno, $errstr, $tmout);
 //         fputs($sock, "Action: Login\r\n");
